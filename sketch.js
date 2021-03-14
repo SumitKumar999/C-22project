@@ -1,6 +1,6 @@
 var helicopterIMG, helicopterSprite, packageSprite,packageIMG;
 var packageBody,ground
-const Engine = Matter.Engine;
+const Engine = Matter.Engine; // namespace (giving nickname)
 const World = Matter.World;
 const Bodies = Matter.Bodies;
 const Body = Matter.Body;
@@ -31,14 +31,17 @@ function setup() {
 	engine = Engine.create();
 	world = engine.world;
 
-	packageBody = Bodies.circle(width/2 , 200 , 5 , {restitution:0.5, isStatic:false});
-	World.add(world, packageBody);
+	holder1 = new Holder(320,550,30,200);
+	holder2 = new Holder(550,550,30,200);
+	holder3 = new Holder(450,600,200,30);
 	
 
 	//Create a Ground
 	ground = Bodies.rectangle(width/2, 650, width, 10 , {isStatic:true} );
  	World.add(world, ground);
 
+	packageBody = Bodies.circle(width/2 , 200 , 5 , {restitution:0.5, isStatic:true}); 
+	World.add(world, packageBody);
 
 	Engine.run(engine);
   
@@ -46,21 +49,37 @@ function setup() {
 
 
 function draw() {
-  rectMode(CENTER);
+  
   background(0);
-  packageSprite.x= packageBody.position.x 
-  packageSprite.y= packageBody.position.y 
-  drawSprites();
+  rectMode(CENTER);
+
+  packageSprite.x = packageBody.position.x;
+  packageSprite.y = packageBody.position.y;
+
+  drawSprites(); 
  
+  holder1.display();
+  holder2.display();
+  holder3.display();
+
 }
 
 function keyPressed() {
- if (keyCode === DOWN_ARROW) {
-    // Look at the hints in the document and understand how to make the package body fall only on press of the Down arrow key.
+ if ((keyCode === DOWN_ARROW)) {
+	
+	Matter.Body.setStatic(packageBody, false);
+	}
 
-    
-  }
+if ((keyCode === LEFT_ARROW)){
+	helicopterSprite.x = helicopterSprite.x - 5;
+	Matter.Body.translate(packageBody, {x:-5, y:0})
 }
 
+if ((keyCode === RIGHT_ARROW)){
+	helicopterSprite.x = helicopterSprite.x + 5;
+	Matter.Body.translate(packageBody, {x:+5, y:0})
 
+}
+
+}
 
